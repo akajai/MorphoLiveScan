@@ -1,0 +1,15 @@
+﻿dotnet ef migrations add InitialCreate --project MorphoLiveScan\MorphoLiveScan.csproj
+
+dotnet ef database update  --project MorphoLiveScan\MorphoLiveScan.csproj
+
+
+docker run -d -p 3306:3306 --name mysql_container -e MYSQL_ROOT_PASSWORD=root mysql
+
+docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password -e MYSQL_USER=username -e MYSQL_PASSWORD=password -p 3306:3306 -d mysql:latest
+
+localhost:3000/checking -for check if record are already on database if no records create new record for scanning
+localhost:3000/enroll -for start scanning fingerprint
+localhost:3000/match -for checking match record on database
+localhost:3000/API/scanning , so the API from this URL will call SDK to start scanning from device
+
+The images are even of 10 MB . so if w e save it in MySQL the process will be slow as we scale. THat problem since it is a exam solution doesn't has to handle right?
