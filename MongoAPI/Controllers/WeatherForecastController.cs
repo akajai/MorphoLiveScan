@@ -16,7 +16,7 @@ namespace MongoAPI.Controllers
             _logger = logger;
             string connectionString = "mongodb://localhost:27017";
             string databaseName = "mydatabase";
-           _collection = database.GetCollection<UserDetails>("UserDetails");
+            _collection = database.GetCollection<UserDetails>("UserDetails");
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
@@ -40,11 +40,25 @@ namespace MongoAPI.Controllers
                 return NotFound();
             return NoContent();
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(string id, UserDetails updatedUser)
+        {
+            // Update an existing user
+            var filter = Builders<UserDetails>.Filter.Eq(u => u.Id, id);
+            var update = Builders<UserDetails>.Update
+                .Set(u => u.FirstName, updatedUser.FirstName)
+                .Set(u => u.LastName, updatedUser.LastName);
+            var result = _collection.UpdateOne(filter, update);
+            if (result.ModifiedCount == 0)
+                return NotFound();
+            return NoContent();
+        }
     }
-}
     public class UserDetails
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
     }
+}
